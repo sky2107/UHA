@@ -9,7 +9,7 @@ Ahmed Warsame 1611148
 
 requirements for this code base 
 python 2.7 
-libaries => PyPDF2, os, re, platform and csv
+libaries => PyPDF2, os, re, platform, PIL, colorsys and csv
 
 
 Zunächst haben wir die ungeschwaerzt.pdf und ungeschwaerzt_markiert.pdf  zu Text Dateien umgewandelt, damit wir mit unterschiedlichen Programmiersprachen an der Textdatei arbeiten können.

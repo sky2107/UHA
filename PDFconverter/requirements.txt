@@ -3,3 +3,5 @@ os
 re
 platform
 csv
+PIL
+colorsys
