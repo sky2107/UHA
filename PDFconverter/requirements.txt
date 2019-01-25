@@ -1,0 +1,9 @@
+PyPDF2
+os
+re
+platform
+csv
+PIL
+colorsys
+turtle
+json
