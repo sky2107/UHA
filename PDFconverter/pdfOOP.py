@@ -1,12 +1,22 @@
 from PyPDF2 import PdfFileReader
+
 import os
 import re
+
 import platform
+
 import csv
+
 from PIL import Image
+
 import colorsys
+
 from turtle import Turtle
+
 import json
+
+import numpy as np 
+import matplotlib.pyplot as plt
 
 
 # python 2.7
@@ -465,7 +475,7 @@ class PDF:
             keith.clear()
 
 if __name__ == '__main__':
-    reader = PDF()
+    # reader = PDF()
     # reader.writeAndSaveFile(
     #     name_of_file='textfile_ungeschwaerzt_markiert', text=reader.text_ungeschwaerzt_markiert)
     # reader.writeAndSaveFile(
@@ -489,6 +499,37 @@ if __name__ == '__main__':
     # print(reader.numberOfPages_unmarked)
 
     # 1822 size of pages
+    # reader.whichPageIsMarked
+
+    json_data = open('data\\dict.json').read()
+
+    data = json.loads(json_data)   
+
+    whichPageIsMarked = []
+    values = []
+    for ele in data:
+        whichPageIsMarked.append(float(ele))
+        values.append(float(data[ele]))
+        
+
+    # whichPageIsMarked = []
+    # with open('data\\whichPageIsMarked.txt', 'r') as f:
+    #     for item in f:
+    #         whichPageIsMarked.append(int(item))
+
+    # An "interface" to matplotlib.axes.Axes.hist() method
+    # d = np.random.laplace(loc=15, scale=3, size=1822)
+    # n, bins, patches = plt.hist(x=d, bins='auto', color='#0504aa',
+    #                             alpha=0.7, rwidth=0.85)
+    # plt.grid(axis='y', alpha=0.75)
+    # plt.xlabel('Value')
+    # plt.ylabel('Frequency')
+    # plt.title('My Very Own Histogram')
+    # plt.text(23, 45, r'$\mu=15, b=3$')
+    # maxfreq = n.max()
+    # Set a clean upper y-axis limit.
+    # plt.ylim(ymax=np.ceil(maxfreq / 10) * 10 if maxfreq % 10 else maxfreq + 10)
+    # plt.show()
 
     
 
