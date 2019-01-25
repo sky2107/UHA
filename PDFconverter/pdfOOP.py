@@ -307,6 +307,96 @@ class PDF:
             print(float(yellow) / (float(gray)))
                      
     def turtleRunning(self):
+        keith = Turtle()
+        colors = ['red', 'yellow', 'red', 'yellow']
+
+        color_not_marked = ['black', 'black']
+        position_of_marked = 0
+        count = 0
+        keith.speed(200)
+        keith.width(4)
+        
+
+        x_axes = 0
+        y_axes = -320
+        keith.pencolor('white')
+        keith.goto(-400,y_axes)
+        keith.pencolor(color_not_marked[position_of_marked])
+        for number in range(1822):
+            print(number)
+            
+            count += 1
+
+            if x_axes >= 800:
+                count = 0
+                x_axes = 0
+                y_axes += 40
+                if y_axes  >= 320:
+                    y_axes = -320
+                keith.pencolor('white')
+                keith.goto(-400,y_axes)
+                keith.pencolor(color_not_marked[position_of_marked])
+                if position_of_marked == 0:
+                    position_of_marked = 1
+                else:
+                    position_of_marked = 0
+
+            if number in self.whichPageIsMarked:
+                keith.pencolor(colors[number % 4])
+                keith.forward(10)
+                x_axes +=10
+
+                # up
+                keith.left(90)
+                keith.forward(50)
+                
+                keith.right(90)
+                keith.forward(10)
+
+                x_axes +=10
+                # down
+                keith.right(90)
+                keith.forward(50)
+
+                keith.left(90)
+
+            else:
+                keith.pencolor(color_not_marked[position_of_marked])
+
+            
+            keith.forward(10)
+            x_axes +=10
+            
+    
+    def firstDrawing(self):
+        keith = Turtle()
+        colors = ['red', 'purple', 'blue', 'orange']
+
+        color_not_marked = ['white', 'green']
+        position_of_marked = 0
+        count = 0
+        keith.speed(10)
+        for number in range(1822):
+            print(number)
+            
+            count += 1
+
+            if number % 200 == 0:
+                count = 0
+                keith.goto(50,50)
+                if position_of_marked == 0:
+                    position_of_marked = 1
+                else:
+                    position_of_marked = 0
+
+            if number in self.whichPageIsMarked:
+                keith.pencolor(colors[number % 4])
+            else:
+                keith.pencolor(color_not_marked[position_of_marked])
+            keith.width(count/10 + 1)
+            keith.forward(count)
+            keith.left(59)
+
 
 if __name__ == '__main__':
     reader = PDF()
@@ -328,13 +418,7 @@ if __name__ == '__main__':
 
     reader.calculateImageInPage(reader.whichPageIsMarked[23])
 
-    keith  = Turtle()
-    keith.speed(1)
-    keith.forward(100)
-    keith.left(55)
-    keith.forward(100)
-
-    keith.done()
+    reader.turtleRunning()
     # print(reader.numberOfPages_marked)
     # print(reader.numberOfPages_unmarked)
 
