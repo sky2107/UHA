@@ -5,6 +5,7 @@ import platform
 import csv
 from PIL import Image
 import colorsys
+from turtle import Turtle
 
 
 # python 2.7
@@ -14,7 +15,7 @@ class PDF:
     cleanUpParametersForTextFile = ['Vorabfassung - wird durch die endgueltige Fassung ersetzt', '\\', '-',
                                     'Drucksache', 'Deutscher Bundestag', 'Wahlperiode', ' ', '.', '\n', ',',
                                     ':', ';', '(', ')', '[', ']', '?', '!']
-
+    ''' constructor '''
     def __init__(self):
         # check which operating system
         if platform.system() == 'Windows':
@@ -60,10 +61,21 @@ class PDF:
         self.listOfImages = None
         self.settingListOfimages()
 
-        self.howManyPagesAreMarked = 0
         self.whichPageIsMarked = []
-
-
+        self.howManyPagesAreMarked = 0
+        self.whichPageIsMarked_path = 'data' + self.slashes + 'whichPageIsMarked.txt'
+        
+        if (os.path.isfile(self.whichPageIsMarked_path)):
+            with open(self.whichPageIsMarked_path, 'r') as f:
+                for item in f:
+                    self.whichPageIsMarked.append(int(item))
+            
+            self.howManyPagesAreMarked = len(self.whichPageIsMarked)
+        
+        self.numberOfPages_marked = self.getSizeOfPages(self.path_ungeschwaerzt_markiert_pdf)
+        self.numberOfPages_unmarked = self.getSizeOfPages(self.path_ungeschwaerzt_pdf)
+        
+        self.valuesOfTheMarkedFiles = []
 
     ''' path: str    
         return value: str '''
@@ -77,6 +89,15 @@ class PDF:
                 textWhole += text
 
         return textWhole
+
+    ''' number of pages from a pdf file
+        path: str
+        return value: int '''
+    def getSizeOfPages(self, path):
+        with open(path, 'rb') as f:
+            pdf = PdfFileReader(f)
+            numberOfPages = pdf.getNumPages()
+        return numberOfPages
 
     ''' path: str   
         number: int '''
@@ -231,16 +252,61 @@ class PDF:
 
             # image is not marked if whole_image == white + gray
             if (float(whole_image) - float(white) - float(gray)) != 0:
-                # print(float(yellow) / (float(whole_image) - float(white) - float(gray)))
-                # print(gray)
-                # print(float(yellow) / (float(gray)))
-                # ungeschwaerzt_markiert-0001
                 self.howManyPagesAreMarked += 1
                 imagePath = imagePath.replace('ungeschwaerzt_markiert-', '')
                 number = imagePath.replace('.jpg', '')
                 number = int(number)
                 self.whichPageIsMarked.append(number)
-                
+
+        with open('data' + self.slashes + 'whichPageIsMarked.txt', 'w') as f:
+            for item in reader.whichPageIsMarked:
+                f.write("%s\n" % item)
+
+    def calculateImageInPage(self, pageNumber):
+        whole_image = 0
+        imagePath = 'ungeschwaerzt_markiert-' + str(pageNumber) + '.jpg'
+        image = Image.open('images' + self.slashes + imagePath).convert('RGBA').resize((64, 64), Image.ANTIALIAS)
+        red, orange, yellow, green, turquoise, blue, lilac, pink, white, gray, black, brown = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        for px in image.getdata():
+            whole_image += 1
+            h, s, l = colorsys.rgb_to_hsv(px[0]/255., px[1]/255., px[2]/255.)
+            h = h * 360
+            s = s * 100
+            l = l * 100
+
+            if l > 95:
+                white += 1
+            elif l < 8:
+                black += 1
+            elif s < 8:
+                gray += 1
+            elif h < 12 or h > 349:
+                red += 1
+            elif h > 11 and h < 35:
+                if s > 70:
+                    orange += 1
+                else:
+                    brown += 1
+            elif h > 34 and h < 65:
+                yellow += 1
+            elif h > 64 and h < 150:
+                green += 1
+            elif h > 149 and h < 200:
+                turquoise += 1
+            elif h > 195 and h < 250:
+                blue += 1
+            elif h > 245 and h < 275:
+                lilac += 1
+            elif h > 274 and h < 350:
+                pink += 1
+
+        # image is not marked if whole_image == white + gray
+        if (float(whole_image) - float(white) - float(gray)) != 0:
+            print(float(yellow) / (float(whole_image) - float(white) - float(gray)))
+            print(gray)
+            print(float(yellow) / (float(gray)))
+                     
+    def turtleRunning(self):
 
 if __name__ == '__main__':
     reader = PDF()
@@ -255,13 +321,24 @@ if __name__ == '__main__':
     # reader.allNamesFromTextFiles()
     # print(reader.name_list_from_text_file)
     
-    reader.calculateForEachImageTheMarkedPart()
+    # reader.calculateForEachImageTheMarkedPart()
+
+    # print(reader.howManyPagesAreMarked)
+    # print(reader.whichPageIsMarked)
+
+    reader.calculateImageInPage(reader.whichPageIsMarked[23])
+
+    keith  = Turtle()
+    keith.speed(1)
+    keith.forward(100)
+    keith.left(55)
+    keith.forward(100)
+
+    keith.done()
+    # print(reader.numberOfPages_marked)
+    # print(reader.numberOfPages_unmarked)
+
+    # 1822 size of pages
+
     
-
-    print(reader.howManyPagesAreMarked)
-    print(reader.whichPageIsMarked)
-
-    with open('testFile.txt', 'w') as f:
-        for item in reader.whichPageIsMarked:
-            f.write("%s\n" % item)
 
