@@ -16,7 +16,7 @@ libaries => PyPDF2, os, re, platform, PIL, colorsys, turtle, json and csv
 - How many pages are marked 100.
 - Total of 1822 pages
 
-![Histogramm](.\\histogramm.PNG?raw=true)
+![Histogramm](histogramm.PNG?raw=true)
 
 Zunächst haben wir die ungeschwaerzt.pdf und ungeschwaerzt_markiert.pdf  zu Text Dateien umgewandelt, damit wir mit unterschiedlichen Programmiersprachen an der Textdatei arbeiten können.
 Als nächstes haben wir versucht mit hilfe regular expression die Textdatei zu entschlacken, d.h. den Text zu cleanen und komprimiert darzustellen.
